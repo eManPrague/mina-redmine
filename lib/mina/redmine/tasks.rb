@@ -14,10 +14,10 @@ namespace :redmine do
       end
 
       set(:last_commit, `git log -n 1 --pretty=format:"%H" origin/#{fetch(:branch)} --`)
-      changes
-      send_redmine_message(redmine_deploy_messagem, url, project, token)
+      redmine_changes
+      send_redmine_message(redmine_deploy_message, url, project, token)
     else
-      print_status 'Unable to create Redmine Announcement, no redmine details provided.'
+      print_status 'Unable to create Redmine Announcement, no redmine details provided (:redmine_url, :redmine_project, :redmine_token).'
     end
   end
 end

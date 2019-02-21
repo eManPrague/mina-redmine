@@ -27,7 +27,10 @@ You'll need to setup your redmine details with an API key, room and subdomain. Y
     # required
     set :redmine_url, 'https://redmine.org/' # Redmine url
     set :redmine_project, 'my_cool_project' # Project name
-    set :redmine_token, 'ABCD1234' # Your deployer profile token
+    set :redmine_token, 'ABCD1234' # Your deploy token
+
+    # optional
+    set :redmine_server, 'http://...app.destination'
 
 Or use the ENV variables:
 
@@ -36,8 +39,11 @@ Or use the ENV variables:
     ENV['redmine_project'] = ''
     ENV['redmine_token'] = ''
 
+    # optional
+    ENV['redmine_server'] || ENV['CI_ENVIRONMENT_URL'] # From gitlab tasks
 
- Update `deploy` task to invoke `redmine:post_info` task:
+
+Update `deploy` task to invoke `redmine:post_info` task:
 
  ```ruby
 task :deploy do
