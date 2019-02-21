@@ -1,15 +1,15 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'mina/slack/version'
+require 'mina/redmine/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "mina-slack"
-  spec.version       = Mina::Slack::VERSION
-  spec.authors       = ["John Koht"]
-  spec.email         = ["john@kohactive.com"]
-  spec.summary       = "Announce Mina deploys to Slack"
-  spec.description   = "Announce Mina deploys to Slack"
+  spec.name          = "mina-redmine"
+  spec.version       = Mina::Redmine::VERSION
+  spec.authors       = ["Jan Strnadek"]
+  spec.email         = ["jan.strnadek@gmail.com"]
+  spec.summary       = "Announce Mina deploys to redmine"
+  spec.description   = "Announce Mina deploys to redmine"
   spec.homepage      = ""
   spec.license       = "MIT"
 
