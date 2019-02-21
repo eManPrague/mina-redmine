@@ -1,5 +1,5 @@
-require 'mina/slack/defaults'
-require 'mina/slack/tasks'
+require 'mina/redmine/defaults'
+require 'mina/redmine/tasks'
 require 'json'
 require 'net/http'
 require 'openssl'
