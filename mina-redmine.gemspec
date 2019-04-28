@@ -23,5 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "net-ssh"
 
   spec.add_dependency "mina"
-
+  spec.add_dependency "unindent"
+  spec.add_development_dependency 'byebug'
 end

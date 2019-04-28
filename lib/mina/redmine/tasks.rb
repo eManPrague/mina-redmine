@@ -1,7 +1,54 @@
+require 'byebug'
+
 # Redmine tasks
 namespace :redmine do
+  def short_revision
+    deployed_revision = fetch(:last_commit)
+    deployed_revision[0..8] if deployed_revision
+  end
+
+  def redmine_deploy_message
+    {
+      project: fetch(:redmine_project),
+      server: fetch(:redmine_server),
+      changes: fetch(:redmine_changes),
+      revision: short_revision
+    }
+  end
+
+  def send_redmine_message(message, redmine_url, redmine_project, redmine_token)
+    comment %{Sending redmine deploy info}
+    command %{
+      curl -X POST #{redmine_url}/deploy_webhook \
+        -H "Content-Type: application/json" \
+        -H "X-Deploy-Token: #{redmine_token}" \
+        -d '#{message.to_json}'
+    }
+  end
+
+  def redmine_changes
+    last_revision = fetch(:last_revision)
+    query = if last_revision.empty?
+              "#{fetch(:deployed_revision)} origin/#{fetch(:branch)}"
+            else
+              "#{fetch(:last_revision)}...#{fetch(:last_commit)} origin/#{fetch(:branch)}"
+            end
+
+    data = (`git --no-pager log --pretty=format:'%s%nMESSAGE_SEPARATOR%n%H%nCOMMIT_SEPARATOR%n' --date=short --abbrev-commit #{query} --`)
+      .split("\nCOMMIT_SEPARATOR\n")
+      .map { |m|
+      message, commit = m.strip.split("\nMESSAGE_SEPARATOR\n")
+      {
+        message: message.strip,
+        commit: commit.strip
+      }
+    }
+
+    set(:redmine_changes, data)
+  end
+
   task :post_info do
-    if (url = fetch(:redmine_url)) && (project = fetch(:redmine_project) && (token = fetch(:redmine_token))
+    if (url = fetch(:redmine_url)) && (project = fetch(:redmine_project)) && (token = fetch(:redmine_token))
       login_data = if (user = fetch(:user))
         [ fetch(:domain), user ]
       else
